@@ -9,6 +9,35 @@ import ChatRoom from './components/ChatRoom'; // Updated component name to `Chat
 import './App.css'
 import SideNavbar from './components/SideNavbar';
 
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Box, Typography, Button } from '@mui/material'; // Assuming you're using Material-UI
+
+const NotFound = () => {
+  return (
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      height="100vh"
+      textAlign="center"
+      bgcolor="#f5f5f5"
+    >
+      <Box>
+        <Typography variant="h1" component="h1" gutterBottom>
+          404
+        </Typography>
+        <Typography variant="h6" component="h2" gutterBottom>
+          Page Not Found
+        </Typography>
+        <Button variant="contained" color="primary" component={Link} to="/">
+          Go to Home
+        </Button>
+      </Box>
+    </Box>
+  );
+};
+
 
 const App = () => {
   const [user, loading] = useAuthState(auth);
@@ -29,7 +58,7 @@ const App = () => {
           path="/chat"
           element={user ? <ChatRoom user={user} /> : <Navigate to="/login" />}
         />
-        <Route path="*" element={<Navigate to="/login" />} />
+         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
     </div>
