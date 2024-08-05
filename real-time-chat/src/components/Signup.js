@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { auth } from '../utils/firebase';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import {  doc, setDoc } from 'firebase/firestore';
 import { getFirestore } from 'firebase/firestore';
 
 const firestore = getFirestore(); // Initialize Firestore
