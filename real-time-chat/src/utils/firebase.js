@@ -1,7 +1,7 @@
 // src/utils/firebase.js
 import { initializeApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import { getFirestore, doc, setDoc } from 'firebase/firestore'; // Import Firestore functions
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore'; // Import Firestore functions
 
 const firebaseConfig = {
   apiKey: "AIzaSyALLCYA8gjcKb0u5dXowaxrbZ_L91derDs",

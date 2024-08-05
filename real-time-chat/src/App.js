@@ -5,7 +5,7 @@ import { auth } from './utils/firebase';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import ChatRoom from './components/ChatRoom'; // Updated component name to `ChatRoom`
-import NavBar from './components/SideNavbar';
+
 import './App.css'
 import SideNavbar from './components/SideNavbar';
 

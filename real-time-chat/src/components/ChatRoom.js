@@ -15,7 +15,7 @@ const ChatRoom = ({ user = {} }) => {
   const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
-    console.log('Logged in user:', user); // Check the user object
+    
 
     if (!user.email) {
       console.error('User email is not defined');
