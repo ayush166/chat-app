@@ -15,3 +15,12 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+const ignoredWarnings = ['Warning: ...', 'Deprecation warning: ...'];
+
+const originalConsoleError = console.error;
+console.error = (message, ...args) => {
+  if (ignoredWarnings.some((warning) => message.includes(warning))) {
+    return;
+  }
+  originalConsoleError(message, ...args);
+};
