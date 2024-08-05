@@ -9,7 +9,7 @@ import ChatRoom from './components/ChatRoom'; // Updated component name to `Chat
 import './App.css'
 import SideNavbar from './components/SideNavbar';
 
-import React from 'react';
+
 import { Link } from 'react-router-dom';
 import { Box, Typography, Button } from '@mui/material'; // Assuming you're using Material-UI
 
