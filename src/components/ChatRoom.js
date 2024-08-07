@@ -5,7 +5,6 @@ import UserList from './UserList';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
 
-
 const socket = io('http://localhost:3001'); // Connect to the server
 
 const ChatRoom = ({ user = {} }) => {
@@ -15,8 +14,6 @@ const ChatRoom = ({ user = {} }) => {
   const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
-    
-
     if (!user.email) {
       console.error('User email is not defined');
       return;
@@ -36,13 +33,11 @@ const ChatRoom = ({ user = {} }) => {
 
     // Listen for incoming messages
     socket.on('message', (msg) => {
-      // Check if the message is between the current user and the selected user
       if (
         (msg.sender === user.email && msg.recipient === selectedUser?.email) ||
         (msg.sender === selectedUser?.email && msg.recipient === user.email)
       ) {
         setMessages((prevMessages) => [...prevMessages, { ...msg, isNew: true }]);
-        // Remove new highlight after 3 seconds
         setTimeout(() => {
           setMessages((prevMessages) =>
             prevMessages.map((m) => (m.timestamp === msg.timestamp ? { ...m, isNew: false } : m))
@@ -58,7 +53,6 @@ const ChatRoom = ({ user = {} }) => {
 
   useEffect(() => {
     if (selectedUser) {
-      // Fetch messages from Firestore for the selected user
       const unsubscribe = fetchMessages(user.email, selectedUser.email, setMessages);
       return () => unsubscribe();
     }
@@ -74,7 +68,6 @@ const ChatRoom = ({ user = {} }) => {
       };
       socket.emit('message', msg);
 
-      // Save the message to Firestore
       try {
         await sendMessageToFirestore(msg);
       } catch (error) {
@@ -86,16 +79,20 @@ const ChatRoom = ({ user = {} }) => {
   };
 
   return (
-    <div className="container">
-      <h1>Chat Room</h1>
-      <h3>Logged in as: {user.displayName}</h3>
-      <div className="chat-room">
-        <div className="user-list">
-          <h2>Select User</h2>
+    <div className="flex flex-col h-screen bg-gray-100">
+      <header className="bg-blue-600 text-white p-4 shadow-md">
+        <h1 className="text-xl font-semibold">Chat Room</h1>
+        <p className="text-sm">Logged in as: {user.displayName}</p>
+      </header>
+      <div className="flex flex-grow">
+        <aside className="w-1/4 bg-white border-r border-gray-300 p-4">
+          <h2 className="text-lg font-semibold mb-4">Select User</h2>
           <UserList users={userList} onSelectUser={setSelectedUser} />
-        </div>
-        <div className="chat-area">
-          <h2>Chat with {selectedUser ? selectedUser.displayName || selectedUser.email : 'No user selected'}</h2>
+        </aside>
+        <main className="flex flex-col w-3/4 p-4 bg-white">
+          <h2 className="text-lg font-semibold mb-4">
+            Chat with {selectedUser ? selectedUser.displayName || selectedUser.email : 'No user selected'}
+          </h2>
           <MessageList messages={messages} currentUserEmail={user.email} userList={userList} />
           <MessageInput
             message={message}
@@ -103,7 +100,7 @@ const ChatRoom = ({ user = {} }) => {
             sendMessage={sendMessage}
             selectedUser={selectedUser}
           />
-        </div>
+        </main>
       </div>
     </div>
   );

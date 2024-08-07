@@ -1,87 +1,117 @@
-import React, { useState } from 'react';
-import { auth } from '../utils/firebase';
+import { Label } from './ui/label';
+import { Input } from './ui/input';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Button } from './ui/button';
+import { useState } from 'react';
+import { auth, firestore } from "../utils/firebase";
+import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import {  doc, setDoc } from 'firebase/firestore';
-import { getFirestore } from 'firebase/firestore';
-
-const firestore = getFirestore(); // Initialize Firestore
+import { doc, setDoc } from 'firebase/firestore';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [displayName, setDisplayName] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState(''); // New state for the user's name
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); // Hook for navigation
 
-  const handleSubmit = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      setLoading(false);
+      return;
+    }
     try {
+      // Create user with email and password
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Update the user's display name
-      await updateProfile(user, { displayName });
+      // Update the user's profile with the name
+      await updateProfile(user, { displayName: name });
 
-      // Save user data to Firestore
+      // Save the user's details to Firestore
       await setDoc(doc(firestore, 'users', user.uid), {
         email: user.email,
-        displayName: user.displayName || 'Anonymous',
+        displayName: name,
+        createdAt: new Date()
       });
 
-      // Clear the form
-      setEmail('');
-      setPassword('');
-      setDisplayName('');
-    } catch (error) {
-      console.error('Error signing up:', error);
-      setError(error.message);
+      navigate('/chat'); // Redirect to the Chat page on successful signup
+    } catch (err) {
+      setError('Failed to sign up. Please check your email and password.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="signup-container">
-      <h1>Sign Up</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="displayName">Name:</label>
-          <input
-            type="text"
-            id="displayName"
-            value={displayName}
-            onChange={(e) => setDisplayName(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        {error && <p className="error">{error}</p>}
-        <button type="submit" disabled={loading}>
-          {loading ? 'Signing Up...' : 'Sign Up'}
-        </button>
-      </form>
+    <div className='w-1/3 mx-auto mt-[5rem]'>
+      <Card>
+        <CardHeader>
+          <CardTitle>Signup</CardTitle>
+          <CardDescription>
+            Create a new account with your Email
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSignup}>
+            <div className="grid w-full items-center gap-4">
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="name">Name</Label>
+                <Input 
+                  id="name" 
+                  placeholder="Name" 
+                  value={name} 
+                  onChange={(e) => setName(e.target.value)} 
+                />
+              </div>
+
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="email">Email</Label>
+                <Input 
+                  id="email" 
+                  placeholder="Email" 
+                  value={email} 
+                  onChange={(e) => setEmail(e.target.value)} 
+                />
+              </div>
+
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="password">Password</Label>
+                <Input 
+                  id="password" 
+                  type="password" 
+                  placeholder="Password" 
+                  value={password} 
+                  onChange={(e) => setPassword(e.target.value)} 
+                />
+              </div>
+              
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="confirm-password">Confirm Password</Label>
+                <Input 
+                  id="confirm-password" 
+                  type="password" 
+                  placeholder="Confirm Password" 
+                  value={confirmPassword} 
+                  onChange={(e) => setConfirmPassword(e.target.value)} 
+                />
+              </div>
+              
+              <Button type="submit" disabled={loading}>
+                {loading ? 'Creating account...' : 'Submit'}
+              </Button>
+              
+              {error && <p className="text-red-500">{error}</p>}
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 };

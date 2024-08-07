@@ -47,12 +47,15 @@ const App = () => {
   }
 
   return (
-   <div className='main'>
+   <div className='flex h-100vh '>
    <Router>
       <SideNavbar />
       <Routes>
       <Route path="/" element={<h3>Your Chat app </h3>} />
-        <Route path="/signup" element={<Signup />} />
+      <Route
+            path="/signup"
+            element={user ? <Navigate to="/chat" /> : <Signup />}
+          />
         <Route path="/login" element={<Login />} />
         <Route
           path="/chat"
