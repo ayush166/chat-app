@@ -2,7 +2,7 @@
 
 #### This Chat app is built using: 
 React.js 
-Firebase***
+Firebase
 
 #### Working Features
 1. Chatting 
