@@ -32,6 +32,7 @@ Firebase
 20. Message Notification 
 21. Message Sent/Recieved
 22. Read Receipts 
+23. Block/Report User
 
 #### License 
 MIT
