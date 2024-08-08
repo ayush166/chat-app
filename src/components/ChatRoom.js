@@ -79,17 +79,18 @@ const ChatRoom = ({ user = {} }) => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
+    <div className="flex flex-col h-screen bg-gray-100 w-full">
       <header className="bg-blue-600 text-white p-4 shadow-md">
         <h1 className="text-xl font-semibold">Chat Room</h1>
         <p className="text-sm">Logged in as: {user.displayName}</p>
       </header>
       <div className="flex flex-grow">
-        <aside className="w-1/4 bg-white border-r border-gray-300 p-4">
-          <h2 className="text-lg font-semibold mb-4">Select User</h2>
+        <aside className="px-2 bg-white border-r border-gray-300 pt-2
+         w-1/3">
+          
           <UserList users={userList} onSelectUser={setSelectedUser} />
         </aside>
-        <main className="flex flex-col w-3/4 p-4 bg-white">
+        <main className="flex flex-col w-3/4 p-4 bg-white w-full  flex-5">
           <h2 className="text-lg font-semibold mb-4">
             Chat with {selectedUser ? selectedUser.displayName || selectedUser.email : 'No user selected'}
           </h2>
