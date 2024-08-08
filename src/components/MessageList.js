@@ -3,7 +3,7 @@ import { formatTimestamp } from '../utils/dateUtils';
 
 const MessageList = ({ messages, currentUserEmail, userList }) => {
   return (
-    <div className="flex flex-col space-y-4 p-4">
+    <div className="flex flex-col space-y-4 p-4 relative z-1">
       {messages.map((message) => (
         <div
           key={message.timestamp}

@@ -18,7 +18,11 @@ const ChatRoom = ({ user = {} }) => {
   const [messages, setMessages] = useState([]);
   const [userList, setUserList] = useState([]);
   const { selectedUser, setSelectedUser } = useChat();
-
+  const getInitials = (name) => {
+    if (!name) return 'U'; // Default initial if no name is provided
+    const names = name.split(' ');
+    return names.map((n) => n[0]).join('').toUpperCase();
+  };
   useEffect(() => {
     if (!user.email) {
       console.error('User email is not defined');
@@ -85,7 +89,7 @@ const ChatRoom = ({ user = {} }) => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100 w-full ">
+    <div className="flex flex-col h-screen bg-gray-100 w-full relative z-1">
       <AppBar />
       <div className="flex relative">
         <aside className="px-2 bg-white border-r border-gray-300 pt-2 w-1/3">
@@ -93,8 +97,20 @@ const ChatRoom = ({ user = {} }) => {
         </aside>
        
         <div className='w-full'>
+        
+   {selectedUser &&<>
+    <div className='flex bg-white items-center pl-5 border-b border-gray-300 '>
+    <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+              <span className="text-gray-500">{getInitials(selectedUser.displayName)}</span>
+            </div>
+
+   <h4 className=' w-full p-5  font-semibold'>{selectedUser?.displayName}</h4></div>
+   </>
+   }
+  
+      
         <ScrollArea className="flex flex-col w-full bg-white ">
-          <div className={clsx("flex-grow  p-4 ")}>
+          <div className={clsx("flex-grow   ")}>
             
             {selectedUser ? (
              <div className='max-h-[29rem]'>
