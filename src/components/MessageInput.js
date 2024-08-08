@@ -8,7 +8,7 @@ const MessageInput = ({ message, setMessage, sendMessage, selectedUser }) => {
   };
 
   return (
-    <div className="flex items-center p-2  bg-white sticky bottom-0">
+    <div className="flex items-center p-2  bg-white absolute bottom-0 w-[900px]">
       <input
         type="text"
         value={message}

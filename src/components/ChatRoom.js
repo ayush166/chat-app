@@ -9,6 +9,7 @@ import { useChat } from '../context/ChatContext';
 import AppBar from './AppBar';
 import About from './About';
 import { ScrollArea } from './ui/scroll-area';
+import clsx from 'clsx';
 
 const socket = io('http://localhost:3001'); // Connect to the server
 
@@ -84,44 +85,37 @@ const ChatRoom = ({ user = {} }) => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100 w-full">
+    <div className="flex flex-col h-screen bg-gray-100 w-full ">
       <AppBar />
-      <div className="flex ">
+      <div className="flex relative">
         <aside className="px-2 bg-white border-r border-gray-300 pt-2 w-1/3">
           <UserList users={userList} onSelectUser={setSelectedUser} />
         </aside>
        
         <div className='w-full'>
-        <ScrollArea className="flex flex-col w-full bg-white max-h-[30rem]">
-          <div className="flex-grow  p-4">
+        <ScrollArea className="flex flex-col w-full bg-white ">
+          <div className={clsx("flex-grow  p-4 ")}>
             
             {selectedUser ? (
-              <MessageList messages={messages} currentUserEmail={user.email} userList={userList} />
+             <div className='max-h-[29rem]'>
+               <MessageList messages={messages} currentUserEmail={user.email} userList={userList} />
+              </div>
             ) : (
-              <About/>
+              <div className='max-h-[30rem]'>
+                <About/>
+                </div>
             )}
           </div>
           
         </ScrollArea>
-        <div className="p-4 border-t border-gray-300">
-           {
-           selectedUser? ( <MessageInput
-            message={message}
-            setMessage={setMessage}
-            sendMessage={sendMessage}
-            selectedUser={selectedUser}
-          />)
-           :(
-            <div>
- <MessageInput
-              message={message}
+     {selectedUser?(
+      <MessageInput 
+      message={message}
               setMessage={setMessage}
               sendMessage={sendMessage}
               selectedUser={selectedUser}
-            />
-            </div>
-           )}
-          </div>
+/>):null
+}
         </div>
       </div>
     </div>
