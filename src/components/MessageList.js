@@ -1,22 +1,28 @@
 import React from 'react';
- // Import the CSS for styling
+import { formatTimestamp } from '../utils/dateUtils';
 
 const MessageList = ({ messages, currentUserEmail, userList }) => {
-  // Helper function to get display name
-  const getDisplayName = (email) => {
-    if (email === currentUserEmail) return 'You';
-    const user = userList.find((user) => user.email === email);
-    return user ? user.displayName || email : email;
-  };
-
   return (
-    <div className="message-list">
-      {messages.map((msg, index) => (
+    <div className="flex flex-col space-y-4 p-4">
+      {messages.map((message) => (
         <div
-          key={index}
-          className={`message-item ${msg.isNew ? 'new-message' : ''}`} // Add class for new messages
+          key={message.timestamp}
+          className={`flex ${message.sender === currentUserEmail ? 'justify-end' : 'justify-start'}`}
         >
-          <strong>{getDisplayName(msg.sender)}:</strong> {msg.text}
+          <div
+            className={`relative max-w-xs py-2 px-4 rounded-lg shadow-lg ${
+              message.sender === currentUserEmail
+                ? 'bg-green-400 text-white'
+                : 'bg-gray-100 text-gray-900'
+            }`}
+          >
+            <div className="flex flex-col">
+              <p className="text-md font-medium mb-2 pr-20">{message.text}</p>
+              <span className="text-xs text-gray-500 mt-auto self-end">
+                {formatTimestamp(message.timestamp)}
+              </span>
+            </div>
+          </div>
         </div>
       ))}
     </div>

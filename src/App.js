@@ -1,17 +1,18 @@
-import React from 'react';
+
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from './utils/firebase';
+
 import Signup from './components/Signup';
 import Login from './components/Login';
 import ChatRoom from './components/ChatRoom'; // Updated component name to `ChatRoom`
 
 import './App.css'
 import SideNavbar from './components/SideNavbar';
-
+import { useUser } from './context/UserContext';
 
 import { Link } from 'react-router-dom';
 import { Box, Typography, Button } from '@mui/material'; // Assuming you're using Material-UI
+
+
 
 const NotFound = () => {
   return (
@@ -40,7 +41,8 @@ const NotFound = () => {
 
 
 const App = () => {
-  const [user, loading] = useAuthState(auth);
+  const { user, loading } = useUser();
+
 
   if (loading) {
     return <div>Loading...</div>; // Optionally, add a loading spinner here
@@ -51,7 +53,7 @@ const App = () => {
    <Router>
       <SideNavbar />
       <Routes>
-      <Route path="/" element={<h3>Your Chat app </h3>} />
+      
       <Route
             path="/signup"
             element={user ? <Navigate to="/chat" /> : <Signup />}

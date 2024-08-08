@@ -1,9 +1,14 @@
+// src/components/ChatRoom.js
 import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import { fetchUsers, fetchMessages, sendMessageToFirestore } from '../utils/firestoreUtils';
 import UserList from './UserList';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
+import { useChat } from '../context/ChatContext';
+import AppBar from './AppBar';
+import About from './About';
+import { ScrollArea } from './ui/scroll-area';
 
 const socket = io('http://localhost:3001'); // Connect to the server
 
@@ -11,7 +16,7 @@ const ChatRoom = ({ user = {} }) => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [userList, setUserList] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const { selectedUser, setSelectedUser } = useChat();
 
   useEffect(() => {
     if (!user.email) {
@@ -80,28 +85,44 @@ const ChatRoom = ({ user = {} }) => {
 
   return (
     <div className="flex flex-col h-screen bg-gray-100 w-full">
-      <header className="bg-blue-600 text-white p-4 shadow-md">
-        <h1 className="text-xl font-semibold">Chat Room</h1>
-        <p className="text-sm">Logged in as: {user.displayName}</p>
-      </header>
-      <div className="flex flex-grow">
-        <aside className="px-2 bg-white border-r border-gray-300 pt-2
-         w-1/3">
-          
+      <AppBar />
+      <div className="flex ">
+        <aside className="px-2 bg-white border-r border-gray-300 pt-2 w-1/3">
           <UserList users={userList} onSelectUser={setSelectedUser} />
         </aside>
-        <main className="flex flex-col w-3/4 p-4 bg-white w-full  flex-5">
-          <h2 className="text-lg font-semibold mb-4">
-            Chat with {selectedUser ? selectedUser.displayName || selectedUser.email : 'No user selected'}
-          </h2>
-          <MessageList messages={messages} currentUserEmail={user.email} userList={userList} />
-          <MessageInput
+       
+        <div className='w-full'>
+        <ScrollArea className="flex flex-col w-full bg-white max-h-[30rem]">
+          <div className="flex-grow  p-4">
+            
+            {selectedUser ? (
+              <MessageList messages={messages} currentUserEmail={user.email} userList={userList} />
+            ) : (
+              <About/>
+            )}
+          </div>
+          
+        </ScrollArea>
+        <div className="p-4 border-t border-gray-300">
+           {
+           selectedUser? ( <MessageInput
             message={message}
             setMessage={setMessage}
             sendMessage={sendMessage}
             selectedUser={selectedUser}
-          />
-        </main>
+          />)
+           :(
+            <div>
+ <MessageInput
+              message={message}
+              setMessage={setMessage}
+              sendMessage={sendMessage}
+              selectedUser={selectedUser}
+            />
+            </div>
+           )}
+          </div>
+        </div>
       </div>
     </div>
   );

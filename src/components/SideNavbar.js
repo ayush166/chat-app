@@ -20,7 +20,7 @@ const SideNavbar = () => {
   return (
     
       <nav className=" w-[10rem] h-screen  text-white bg-[rgba(8,8,7,0.9)] shadow-[0_8px_32px_0_rgba(31,38,135,0.2)] backdrop-blur-[2px] rounded-[10px]">
-     <div className=""> <Logo /></div>
+    <Link to="/"> <div className=""> <Logo /></div></Link>
       <ul className="">
         {user ? (
           <>
