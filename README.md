@@ -33,7 +33,8 @@ Firebase
 21. Message Sent/Recieved
 22. Read Receipts 
 23. Block/Report User
-
+24. Delete Sent and Recieved Messages
+25. Edit Messages
 #### License 
 MIT
 
